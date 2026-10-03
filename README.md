@@ -1,4 +1,12 @@
-# PscanR Backgrounds
+# PscanR Backgrounds: generation pipeline
+
+> This repository holds the pipeline that generates the PscanR promoter
+> backgrounds, with its configuration, annotation snapshots, raw inputs and
+> reports. It is not distributed through Bioconductor. The Bioconductor
+> ExperimentHub package now lives at
+> [Federico77z/PscanRBackgrounds](https://github.com/Federico77z/PscanRBackgrounds),
+> and the released background files are archived on
+> [Zenodo](https://doi.org/10.5281/zenodo.21821764).
 
 This repository stores precomputed promoter-background statistics used by
 [PscanR](https://github.com/Federico77z/PscanR). For every supported assembly,
