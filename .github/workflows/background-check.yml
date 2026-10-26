@@ -11,7 +11,9 @@ permissions:
 
 jobs:
   check:
-    runs-on: ubuntu-latest
+    # Pinned: on ubuntu-26.04 (ubuntu-latest since October 2026) Bioconductor
+    # packages are built from source and the runner runs out of disk.
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
 
@@ -22,6 +24,10 @@ jobs:
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
+          # Only hard dependencies: the Suggests of GenomicFeatures and the
+          # other annotation packages include whole-genome data packages
+          # (BSgenome, SNPlocs) that the check does not use.
+          dependencies: '"hard"'
           extra-packages: |
             any::BiocManager
             bioc::GenomicFeatures
