@@ -26,12 +26,15 @@ jobs:
         with:
           # Only hard dependencies: the Suggests of GenomicFeatures and the
           # other annotation packages include whole-genome data packages
-          # (BSgenome, SNPlocs) that the check does not use.
+          # (BSgenome, SNPlocs) that the check does not use. The Suggests the
+          # check does need (makeTxDbFromUCSC: RMariaDB; taxonomy lookup:
+          # GenomeInfoDbData) are listed explicitly.
           dependencies: '"hard"'
           extra-packages: |
             any::BiocManager
             bioc::GenomicFeatures
             bioc::GenomeInfoDb
+            bioc::GenomeInfoDbData
             bioc::rtracklayer
             bioc::txdbmaker
             any::DBI
