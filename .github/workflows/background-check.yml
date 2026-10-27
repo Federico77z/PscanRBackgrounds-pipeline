@@ -11,9 +11,11 @@ permissions:
 
 jobs:
   check:
-    runs-on: ubuntu-latest
+    # Pinned: on ubuntu-26.04 (ubuntu-latest since October 2026) Bioconductor
+    # packages are built from source and the runner runs out of disk.
+    runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - uses: r-lib/actions/setup-r@v2
         with:
@@ -22,12 +24,21 @@ jobs:
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
+          # Only hard dependencies: the Suggests of GenomicFeatures and the
+          # other annotation packages include whole-genome data packages
+          # (BSgenome, SNPlocs) that the check does not use. The Suggests the
+          # check does need (makeTxDbFromUCSC: RMariaDB; taxonomy lookup:
+          # GenomeInfoDbData) are listed explicitly.
+          dependencies: '"hard"'
           extra-packages: |
             any::BiocManager
             bioc::GenomicFeatures
             bioc::GenomeInfoDb
+            bioc::GenomeInfoDbData
             bioc::rtracklayer
             bioc::txdbmaker
+            any::DBI
+            any::RMariaDB
 
       - name: Validate repository
         run: |
@@ -42,7 +53,7 @@ jobs:
         run: |
           Rscript -e 'x <- read.delim("reports/annotation_check.tsv"); cat(sprintf("changed=%s\n", if (any(x$candidate_change)) "true" else "false"), file = Sys.getenv("GITHUB_OUTPUT"), append = TRUE)'
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v5
         with:
           name: background-input-check
           path: reports/annotation_check.tsv
